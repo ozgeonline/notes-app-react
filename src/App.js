@@ -7,12 +7,13 @@ import {nanoid} from "nanoid"
 
 export default function App() {
     const [notes, setNotes] = React.useState(
-        JSON.parse(() => localStorage.getItem("notes")) || [])
+        () => JSON.parse(localStorage.getItem("notes")) || [])
 
     const [currentNoteId, setCurrentNoteId] = React.useState((notes[0] && notes[0].id) || "")
 
     React.useEffect(()=>{
         localStorage.setItem("notes", JSON.stringify(notes))
+        // console.log(JSON.stringify(notes[0].body.split("\n")))
     },[notes])
     
     function createNewNote() {
@@ -25,11 +26,34 @@ export default function App() {
     }
     
     function updateNote(text) {
-        setNotes(oldNotes => oldNotes.map(oldNote => {
-            return oldNote.id === currentNoteId ? { ...oldNote, body: text } : oldNote
-        }))
+       // Güncellenen dizi en üste geçer
+        setNotes(oldNotes => {
+            const newArray = []
+            for(let i = 0; i < oldNotes.length; i++) {
+                const oldNote = oldNotes[i]
+                if(oldNote.id === currentNoteId) {
+                    newArray.unshift({ ...oldNote, body: text })
+                } else {
+                    newArray.push(oldNote)
+                }
+            }
+            return newArray
+        })
+        
+        // id'ye göre sıralanır
+        // setNotes(oldNotes => oldNotes.map(oldNote => {
+        //     return oldNote.id === currentNoteId
+        //         ? { ...oldNote, body: text }
+        //         : oldNote
+        // }))
     }
     
+    function deleteNote(event, noteId) {
+        event.stopPropagation()
+        console.log("deleted note", noteId)
+        setNotes(oldNotes => oldNotes.filter(note => note.id !== noteId))
+    }
+
     function findCurrentNote() {
         return notes.find(note => {
             return note.id === currentNoteId
@@ -49,6 +73,7 @@ export default function App() {
                   currentNote={findCurrentNote()}
                   setCurrentNoteId={setCurrentNoteId}
                   newNote={createNewNote}
+                  deleteNote={deleteNote}
                 />
                 { currentNoteId && notes.length > 0 &&
                   <Editor 
