@@ -27,10 +27,10 @@ button:focus {
   width: 20%;
   height: 100vh;
 }
-
+/* 
 .sidebar--note {
-  /* display: flex; */
-}
+  display: flex;
+} */
 
 .sidebar--header {
   display: flex;
@@ -40,6 +40,7 @@ button:focus {
 
 .sidebar--header > h3 {
   font-size: 1.75rem;
+  color: #321DEE;
 }
 
 .new-note {
@@ -102,9 +103,9 @@ button:focus {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+ 
 .selected-note {
-  background-color: #345D6E;
+  background-color: #047C51;
 }
 
 .selected-note .text-snippet {
@@ -153,7 +154,8 @@ button:focus {
 
 .trash-icon {
   cursor: pointer;
-  color: #CE0000;
+  color: #FE5825;
+  right: 15px;
 }
 
 .gg-trash {
